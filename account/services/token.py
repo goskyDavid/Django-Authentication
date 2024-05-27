@@ -10,6 +10,6 @@ class TokenService:
     def get_token(self):
         refresh = RefreshToken.for_user(self.user)
         return {
-            "access": str(refresh.access_token),
-            "refresh": str(refresh),
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh),
         }
