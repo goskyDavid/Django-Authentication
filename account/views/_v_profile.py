@@ -1,16 +1,18 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
 
-from account.serializers import UserProfileSerializer
-from account.services import UserRenderer
+from account.mixins import UpdateProfileMixin
+from account.serializers import ProfileSerializer
 
 
-class UserProfileView(APIView):
-    renderer_classes = [UserRenderer]
-    permission_classes = [IsAuthenticated]
+class UserProfileView(GenericAPIView, RetrieveModelMixin, UpdateProfileMixin):
+    serializer_class = ProfileSerializer
 
-    def get(self, request, format=None):
-        serializer = UserProfileSerializer(request.user)
-        return Response(serializer.data, status=HTTP_200_OK)
+    def get_object(self):
+        return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs, partial=True)

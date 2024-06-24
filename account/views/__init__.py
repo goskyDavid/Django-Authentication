@@ -1,11 +1,36 @@
-from ._v_login import UserLoginView
+from .auth import (
+    RegisterView,
+    LoginView,
+    VerifyView,
+    SendVerifyCodeView,
+    PasswordResetView,
+)
+from .user import (
+    UserAllView,
+    UserListView,
+    UserDetailView,
+    UserRestoreView,
+    UserPasswordResetView,
+    UserAuditListView,
+)
+from .utils import CheckUserEmailView
 from ._v_profile import UserProfileView
-from ._v_register import UserRegistrationView
-from ._v_forget_pass import UserPasswordResetView
+from ._v_dataRequest import DataRequestListView
+
 
 __all__ = [
-    'UserLoginView',
-    'UserProfileView',
-    'UserRegistrationView',
-    'UserPasswordResetView',
+    "RegisterView",
+    "LoginView",
+    "VerifyView",
+    "SendVerifyCodeView",
+    "PasswordResetView",
+    "UserAllView",
+    "UserListView",
+    "UserDetailView",
+    "UserRestoreView",
+    "UserPasswordResetView",
+    "UserAuditListView",
+    "CheckUserEmailView",
+    "UserProfileView",
+    "DataRequestListView",
 ]

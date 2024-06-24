@@ -1,25 +1,27 @@
 from rest_framework import serializers
 from account.models import User
+from services.exceptions import BadRequest
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    # We are writing this becoz we need confirm password field in our Registratin Request
-    password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
-
+class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "name", "password", "password2"]
+        fields = (
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+        )
         extra_kwargs = {"password": {"write_only": True}}
 
-    # Validating Password and Confirm Password while Registration
     def validate(self, attrs):
-        password = attrs.get("password")
-        password2 = attrs.get("password2")
-        if password != password2:
-            raise serializers.ValidationError(
-                "Password and Confirm Password doesn't match"
-            )
-        return attrs
+        if User.objects.filter(email=attrs.get("email")).exists():
+            raise BadRequest("El usuario con el mismo correo electrónico ya existe.")
+        return super().validate(attrs)
 
-    def create(self, validate_data):        
-        return User.objects.create_user(**validate_data)
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User.objects.create(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        html {
+            width: 794px;
+
+            margin: auto;
+        }
+
+        body {
+            margin: 0 auto;
+
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        table {
+            width: 794px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+
+            text-align: left;
+            vertical-align: middle;
+
+            padding: 4px;
+
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <!-- PDF Header -->
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;" class="text-center">
+        ICARE | INSTITUTO CHILENO DE ADMINISTRACION RACIONAL DE EMPRESAS
+    </div>
+    <div style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" class="text-center">
+        EL GOLF 40, PISO ZÓCALO, LAS CONDES | TEL 2 2280 5316 | aortuzar@icare.cl
+    </div>
+    <div style="font-size: 15px; font-weight: bold; font-style: italic;" class="text-center">
+        Corporación privada sin fines de lucro fundada en 1953
+    </div>
+    <!-- END of PDF Header -->
+
+    <!-- Company detail section -->
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px; margin-top: 50px;">
+        Datos de la empresa
+    </div>
+    <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 8px;">
+            <b>ID:</b> {{ company.id }}
+        </div>
+        <div style="margin-bottom: 8px;">
+            <b>Nombre:</b> {{ company.legal_name }}
+        </div>
+        <div style="margin-bottom: 8px;">
+            <b>RUT:</b> {{ company.rut }}
+        </div>
+        <div style="margin-bottom: 8px;">
+            {% if company.phone1 %}
+                <b>Teléfono:</b> {{ company.phone1 }}
+            {% else %}
+                <b>Teléfono:</b> {{ "N/A" }}
+            {% endif %}
+        </div>
+        <div style="margin-bottom: 8px;">
+            <b>Rango de empleados:</b> {{ company.employee_range_str }}
+        </div>
+        <div style="margin-bottom: 8px;">
+            {% if company.economic_sector %}
+                <b>Sector económico:</b> {{ company.economic_sector.name }}
+            {% else %}
+                <b>Sector económico:</b> {{ "N/A" }}
+            {% endif %}
+        </div>
+        <div style="margin-bottom: 8px;">
+            {% if company.type %}
+                <b>Tipo:</b> {{ company.type.name }}
+            {% else %}
+                <b>Tipo:</b> {{ "N/A" }}
+            {% endif %}
+        </div>
+        <div style="margin-bottom: 8px;">
+            <b>Creado en:</b> {{ company.created_at }}
+        </div>
+        <div style="margin-bottom: 8px;">
+            <b>Estado:</b> {{ company.status_str }}
+        </div>
+    </div>
+    <!-- END of Company detail section -->
+
+    <!-- Company address section -->
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px;">
+        Direcciones
+    </div>
+    <div style="margin-bottom: 20px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dirección</th>
+                    <th>Descripción</th>
+                    <th>Comuna</th>
+                    <th>Geolocalización</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for address in addresses %}
+                    <tr>
+                        <td>{{ address.address }}</td>
+                        <td>{{ address.description }}</td>
+                        {% if address.commune %}
+                            <td>{{ address.commune.name }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        <td><code>{{ address.latitude }}, {{ address.longitude }}</code></td>
+                        <td>{{ address.type_str }}</td>
+                        <td>{{ address.status_str }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Company executive section -->
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px;">
+        Ejecutivos
+    </div>
+    <div style="margin-bottom: 20px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>RUT</th>
+                    <th>Tipo</th>
+                    <th>Área Cargo</th>
+                    <th>Clase Cargo</th>
+                    <th>Correo electrónico del trabajo</th>
+                    <th>Teléfono del trabajo</th>
+                    <th>Estado</th>
+                    <th>Creado en</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for executive in executives %}
+                    <tr>
+                        {% if executive.person.rut %}
+                            <td>{{ executive.person.rut }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        {% if executive.association_type %}
+                            <td>{{ executive.association_type.name }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        {% if executive.job_area %}
+                            <td>{{ executive.job_area.name }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        {% if executive.position_class %}
+                            <td>{{ executive.position_class.name }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        {% if executive.work_email %}
+                            <td>{{ executive.work_email }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        {% if executive.work_phone %}
+                            <td>{{ executive.work_phone }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        <td>{{ executive.status_str }}</td>
+                        <td>{{ executive.created_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Company children section -->
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px;">
+        Empresas filiales
+    </div>
+    <div style="margin-bottom: 20px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>RUT</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Creado en</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child_company in child_companies %}
+                    <tr>
+                        <td>{{ child_company.id }}</td>
+                        <td>{{ child_company.rut }}</td>
+                        <td>{{ child_company.legal_name }}</td>
+                        <td>{{ child_company.type_name }}</td>
+                        <td>{{ child_company.created_at }}</td>
+                        <td>{{ child_company.status_str }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<body>
+</html>
